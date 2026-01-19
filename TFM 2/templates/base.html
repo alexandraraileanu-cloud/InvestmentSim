@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>InvestmentSim</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <nav class="bg-white shadow-md border-b-2 border-rose-200">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="{{ url_for('index') }}" class="text-2xl font-bold text-rose-600">InvestmentSim</a>
+
+      <div class="space-x-3">
+        {% if current_user.is_authenticated %}
+          <a href="{{ url_for('dashboard') }}" class="text-gray-700 hover:text-rose-600 font-medium transition">Dashboard</a>
+          <a href="{{ url_for('portfolio') }}" class="text-gray-700 hover:text-rose-600 font-medium transition">Portfolio</a>
+          <a href="{{ url_for('logout') }}" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">Logout</a>
+        {% else %}
+          <a href="{{ url_for('login') }}" class="bg-rose-500 text-white px-4 py-2 rounded-lg hover:bg-rose-600 transition">Login</a>
+          <a href="{{ url_for('register') }}" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition">Register</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-5xl mx-auto p-6">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="space-y-2 mb-6">
+          {% for cat, msg in messages %}
+            <div class="p-4 rounded-lg
+              {% if cat == 'success' %} bg-green-100 text-green-800 border border-green-200
+              {% elif cat == 'error' or cat == 'danger' %} bg-red-100 text-red-800 border border-red-200
+              {% elif cat == 'warning' %} bg-yellow-100 text-yellow-800 border border-yellow-200
+              {% else %} bg-gray-100 text-gray-800 border border-gray-200 {% endif %}">
+              {{ msg }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+  </main>
+
+</body>
+</html>
+
+  <main class="max-w-5xl mx-auto p-6">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="space-y-2">
+          {% for cat, msg in messages %}
+            <div class="p-4 rounded-lg
+              {% if cat == 'success' %} bg-green-100 text-green-800
+              {% elif cat == 'error' %} bg-red-100 text-red-800
+              {% elif cat == 'warning' %} bg-yellow-100 text-yellow-800
+              {% else %} bg-gray-100 text-gray-800 {% endif %}">
+              {{ msg }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="max-w-4xl mx-auto mt-8">
+
+  <div class="bg-gradient-to-r from-rose-500 to-pink-500 rounded-2xl shadow-xl p-8 text-white mb-8">
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-4xl font-bold mb-2">{{ asset.ticker }}</h1>
+        <p class="text-rose-100 text-lg">{{ asset.name }}</p>
+      </div>
+      <div class="text-right">
+        <p class="text-rose-100 text-sm mb-1">Last Price</p>
+        <p class="text-4xl font-bold">
+          {% if asset.last_price %}
+            {{ '%.2f' % asset.last_price }} €
+          {% else %}
+            —
+          {% endif %}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-lg p-8 mb-8 border border-rose-100">
+    <h3 class="text-2xl font-bold text-gray-800 mb-6">Trade {{ asset.ticker }}</h3>
+
+    <form method="post" class="space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Operation Type</label>
+          <select
+            name="op_type"
+            class="w-full px-4 py-3 border border-rose-200 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all">
+            <option value="buy">🟢 Buy</option>
+            <option value="sell">🔴 Sell</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
+          <input
+            name="quantity"
+            type="number"
+            step="0.01"
+            min="0.01"
+            required
+            class="w-full px-4 py-3 border border-rose-200 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all"
+            placeholder="e.g., 10">
+        </div>
+
+        <div class="flex items-end">
+          <button
+            type="submit"
+            class="w-full bg-rose-500 hover:bg-rose-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg">
+            Execute
+          </button>
+        </div>
+      </div>
+
+      {% if asset.last_price %}
+      <div class="bg-rose-50 p-4 rounded-lg border border-rose-200">
+        <p class="text-sm text-rose-800">
+          💡 <strong>Estimated price:</strong> Cost per 1 share is approximately {{ '%.2f' % asset.last_price }} €
+        </p>
+      </div>
+      {% endif %}
+    </form>
+  </div>
+
+  {% if img %}
+  <div class="bg-white rounded-2xl shadow-lg p-8 border border-rose-100">
+    <h3 class="text-2xl font-bold text-gray-800 mb-6">History (Last Month)</h3>
+    <div class="flex justify-center">
+      <img
+        src="data:image/png;base64,{{ img }}"
+        alt="Chart of {{ asset.ticker }}"
+        class="max-w-full h-auto rounded-lg shadow-md">
+    </div>
+  </div>
+  {% else %}
+  <div class="bg-yellow-50 border border-yellow-200 rounded-2xl p-6 text-center">
+    <p class="text-yellow-800">⚠️ No historical data available for this asset</p>
+  </div>
+  {% endif %}
+
+  <div class="mt-8 text-center">
+    <a
+      href="{{ url_for('dashboard') }}"
+      class="inline-block bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-3 px-6 rounded-lg transition-colors">
+      ← Back to Dashboard
+    </a>
+  </div>
+</div>
+
+{% endblock %}
